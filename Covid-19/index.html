@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<!-- Downloaded at: https://colorlib.com/wp/template/ahana/ -->
+<head>
+	<title>COVID-19 Analysis Italy</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="Ahana Yoga HTML Template">
+	<meta name="keywords" content="yoga, html">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Stylesheets -->
+	<link rel="stylesheet" href="css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="css/font-awesome.min.css"/>
+	<link rel="stylesheet" href="css/owl.carousel.min.css"/>
+	<link rel="stylesheet" href="css/nice-select.css"/>
+	<link rel="stylesheet" href="css/magnific-popup.css"/>
+	<link rel="stylesheet" href="css/slicknav.min.css"/>
+	<link rel="stylesheet" href="css/animate.css"/>
+
+	<!-- Main Stylesheets -->
+	<link rel="stylesheet" href="css/style.css"/>
+
+
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+
+
+
+	<script src="https://d3js.org/d3.v4.js"></script>
+	<script src='lib/lodash.js'></script>
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+</head>
+<body>
+	<!-- Page Preloder -->
+	<div id="preloder">
+		<div class="loader"></div>
+	</div>
+
+	<!-- Part 1 -->
+	<section class="about-section spad">
+		<div class="container">
+			<div class="section-title text-center">
+				<h2>Analysis of COVID</h2>
+				<hr>
+				<h3>First part</h3>
+				<p>Analysis and predction of COVID in ITaly!</p>
+			</div>
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="about-img">
+						<p>graph 1</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Part 1 end -->
+
+	<!-- Part 2 -->
+	<section class="classes-section spad">
+		<div class="container">
+			<div class="section-title text-center">
+				
+				<h3>Second part</h3>
+				<p>Introduction</p>
+
+
+
+
+
+				<p>In our experiments, we assume the curve of total number of people affected by Covid-19 follows a sigmoidal evolution. This pattern is well know in Biosciences and closely resembles the evolution of pandemics within a given population. In order to do this, our dataset is composed of input-output pairs \({xi, yi}, i=1,\ldots,N\) where \(xi\) is a time-index representing the day, \(y</em>i\) is the total number of positives to Covid-19 until that day and \(N\) is the total number of observations until today. In terms of modeling, we assume our data to be Normally distributed as follows:</p>
+
+				<p>$$\mathcal{N}(yi| \mu(xi), \sigma^2),$$ </p>
+
+				<p>where we parametrize the mean of the distribution with a Sigmoid function. More in detail, the function parametrizing the mean of our observation distribution is:</p>
+
+				<p>$$\mu(x) = \frac{\alpha}{1+\gamma e^{-\omega x}} + \beta,$$</p>
+
+				<p>where \( \alpha, \beta, \gamma, \omega \) are trainable parameters which we'll optimize in order to better fit observable data (together with the assumed observation noise \( \sigma^2\)).</p>
+
+				<p>In practice, we won't be optimizing for a point-estimate (i.e. a single value) of our parameters, but rather for an entire distribution over our parameters in order to account for uncertainty in our model's predictions. To do this we implement the model from a Bayesian standpoint approximating the posterior distribution over the model's parameters through Stocastic Variational Inference (SVI) in <a href="http://pyro.ai/">Pyro</a>.</p>
+
+				<p>(Code available at: <a href="">AGGIUNGERE LINK</a>)</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			</div>
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="about-img">
+						<p>graph 1</p>
+
+
+
+
+
+
+						<!-- Initialize a select button -->
+						<select id="selectButton"></select>
+
+						<!-- Create a div where the graph will take place -->
+						<div id="my_dataviz" style="width:800px; margin:0 auto;"></div>
+						<div id="my_dataviz"></div>
+
+
+
+						<!-- Color Scale -->
+						<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+						<script>
+							// set the dimensions and margins of the graph
+							var margin = {top: 10, right: 30, bottom: 60, left: 60},
+							    width = 460 - margin.left - margin.right,
+							    height = 400 - margin.top - margin.bottom;
+
+							// append the svg object to the body of the page
+							var svg = d3.select("#my_dataviz")
+							  .append("svg")
+							    .attr("width", width + margin.left + margin.right)
+							    .attr("height", height + margin.top + margin.bottom)
+							  .append("g")
+							    .attr("transform",
+							          "translate(" + margin.left + "," + margin.top + ")");
+
+							//Read the data
+							d3.csv("https://raw.githubusercontent.com/luc-fur/Test2/master/World_Visualizazione.csv",
+
+							 function(d){
+									    return { date : d3.timeParse("%m/%d/%Y")(d.variable),
+								    			Country :d.index,
+											    terapia_intensiva :d.value,
+											     }
+									  },
+
+							 function(data) {
+
+							    // List of groups (here I have one group per column)
+							    var allGroup = d3.map(data, function(d){return(d.Country)}).keys()
+
+							    // add the options to the button
+							    d3.select("#selectButton")
+							      .selectAll('myOptions')
+							     	.data(allGroup)
+							      .enter()
+							    	.append('option')
+							      .text(function (d) { return d; }) // text showed in the menu
+							      .attr("value", function (d) { return d; }) // corresponding value returned by the button
+
+							    // A color scale: one color for each group
+							    var myColor = d3.scaleOrdinal()
+							      .domain(allGroup)
+							      .range(d3.schemeSet2);
+
+							    // Add X axis --> it is a date format
+							    var x = d3.scaleTime()
+							      .domain(d3.extent(data, function(d) { return d.date; }))
+							      .range([ 0, width ]);
+							    svg.append("g")
+							      .attr("transform", "translate(0," + height + ")")
+							       .call(d3.axisBottom(x)
+							        .tickFormat(d3.timeFormat("%m/%d/%Y")).ticks(20))
+							       .selectAll("text")	
+							        .style("text-anchor", "end")
+							        .attr("dx", "-.8em")
+							        .attr("dy", ".15em")
+							        .attr("transform", "rotate(-65)");
+							       //.attr("transform", "rotate(-65)");
+							      //.call(d3.axisBottom(x).ticks(7));
+
+							    // Add Y axis
+							    var y = d3.scaleLinear()
+							      .domain([0, d3.max(data, function(d) { return +d.terapia_intensiva; })])
+							      .range([ height, 0 ]);
+							    svg.append("g")
+							      .call(d3.axisLeft(y));
+
+							    // Initialize line with first group of the list
+							    var line = svg
+							      .append('g')
+							      .append("path")
+							        .datum(data.filter(function(d){return d.Country==allGroup[0]}))
+							        .attr("d", d3.line()
+							          .x(function(d) { return x(d.date) })
+							          .y(function(d) { return y(+d.terapia_intensiva) })
+							        )
+							        .attr("stroke", function(d){ return myColor("valueA") })
+							        .style("stroke-width", 4)
+							        .style("fill", "none")
+
+							    // A function that update the chart
+							    function update(selectedGroup) {
+
+							      // Create new data with the selection?
+							      var dataFilter = data.filter(function(d){return d.Country==selectedGroup})
+
+							      // Give these new data to update line
+							      line
+							          .datum(dataFilter)
+							          .transition()
+							          .duration(1000)
+							          .attr("d", d3.line()
+							            .x(function(d) { return x(d.date) })
+							            .y(function(d) { return y(+d.terapia_intensiva) })
+							          )
+							          .attr("stroke", function(d){ return myColor(selectedGroup) })
+							    }
+
+							    // When the button is changed, run the updateChart function
+							    d3.select("#selectButton").on("change", function(d) {
+							        // recover the option that has been chosen
+							        var selectedOption = d3.select(this).property("value")
+							        // run the updateChart function with this selected option
+							        update(selectedOption)
+							    })
+							})
+						</script>
+
+
+
+
+
+
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Part 2 end -->
+
+	<!-- Footer Section -->
+	<footer class="footer-section">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-3 col-sm-6">
+					<div class="footer-widget">
+						<div class="about-widget">
+							<div class="ci-bottom">
+								<div class="ci-author">
+									<img src="img/1.jpg" alt="">
+									<div class="author-text">
+										<h6>Luca Furlanetto</h6>
+										<p>Headline</p>
+										<a href="#"><i class="fa fa-linkedin"></i></a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-3 col-sm-6">
+					<div class="footer-widget">
+						<div class="about-widget">
+							<div class="ci-bottom">
+								<div class="about-instructor-widget">
+									<img src="img/IMG_9088.jpg" alt="">
+									<h4>Luca Furlanetto</h4>
+									<h6>Title</h6>
+									<p>headline</p>
+									<div class="ai-social">
+										<a href="#"><i class="fa fa-github"></i></a>
+										<a href="#"><i class="fa fa-linkedin"></i></a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-3 col-sm-6">
+					<div class="footer-widget">
+						<div class="about-widget">
+							<div class="ci-bottom">
+								<div class="ci-author">
+									<img src="img/1.jpg" alt="">
+									<div class="author-text">
+										<h6>Luca Furlanetto</h6>
+										<p>Headline</p>
+										<a href="#"><i class="fa fa-linkedin"></i></a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>	
+			<div class="footer-bottom">
+				<div class="row">
+					<div class="col-md-8 text-md-right">
+						<div class="copyright"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!-- Footer Section end -->
+
+
+	<!--====== Javascripts & Jquery ======-->
+	<script src="js/vendor/jquery-3.2.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery.slicknav.min.js"></script>
+	<script src="js/owl.carousel.min.js"></script>
+	<script src="js/jquery.nice-select.min.js"></script>
+	<script src="js/jquery-ui.min.js"></script>
+	<script src="js/jquery.magnific-popup.min.js"></script>
+	<script src="js/main.js"></script>
+
+	</body>
+</html>
