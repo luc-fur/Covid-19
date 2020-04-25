@@ -54,11 +54,9 @@
 					
 				<p align="justify">Firstly, we ask ourself which insight we could get from observing the data of those countries that first have gone through the Covid-19 crisis.Then, how we could use this knowledge to forcaset the future of the pandemy.</p>
 				
-				<p align="justify">Technicaly speaking, we assume the curve of total number of people affected by Covid-19 follows a sigmoidal evolution. This pattern is well know in Biosciences and closely resembles the evolution of pandemics within a given population. In order to do this, our dataset is composed of input-output pairs \({x_i, yi}, i=1,\ldots,N\) where \(xi\) is a time-index representing the day, \(y</em>i\) is the total number of positives to Covid-19 until that day and \(N\) is the total number of observations until today. In terms of modeling, we assume our data to be Normally distributed as follows:</p>
+				<p align="justify">Technicaly speaking, we assume the curve of total number of people affected by Covid-19 follows a sigmoidal evolution. This pattern is well know in Biosciences and closely resembles the evolution of pandemics within a given population. In order to do this, our dataset is composed of input-output pairs \({x_i, y_i}, i=1,\ldots,N\) where \(x_i\) is a time-index representing the day, \(y</em>_i\) is the total number of positives to Covid-19 until that day and \(N\) is the total number of observations until today. In terms of modeling, we assume our data to be Normally distributed as follows: \( \mathcal{N}(yi| \mu(xi), \sigma^2) \)</p>
 
-				<p>$$\mathcal{N}(yi| \mu(xi), \sigma^2),$$ </p>
-
-				<p align="justify">where we parametrize the mean of the distribution with a Sigmoid function. More in detail, the function parametrizing the mean of our observation distribution is:</p>
+				<p align="justify">In this function we parametrize the mean of the distribution with a Sigmoid function. More in detail, the function parametrizing the mean of our observation distribution is:</p>
 
 				<p align="justify">$$\mu(x) = \frac{\alpha}{1+\gamma e^{-\omega x}} + \beta,$$</p>
 
